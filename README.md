@@ -1,0 +1,2 @@
+# opencv_greedy_snake
+Java作业，使用OpenCV实现一个简单的贪吃蛇游戏
