@@ -37,8 +37,15 @@ public class GreedySnakeApp {
             Boolean found = detector.detectCenter(frame, chessboardCenter);
             if (found) {
                 if (!initailized) {
-                    snake.points.addFirst(chessboardCenter.clone());
-                    snake.points.addFirst(chessboardCenter.clone());
+                    // init snake body
+                    // head
+                    snake.points.addFirst(chessboardCenter);
+                    // second point
+                    chessboardCenter.x -= RADIUS;
+                    snake.points.addFirst(chessboardCenter);
+                    // third point
+                    chessboardCenter.x -= RADIUS;
+                    snake.points.addFirst(chessboardCenter);
                     initailized = true;
                     continue;
                 }
