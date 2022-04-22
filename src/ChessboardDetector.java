@@ -16,8 +16,8 @@ public class ChessboardDetector {
         MatOfPoint2f corners = new MatOfPoint2f();
         boolean found = Calib3d.findChessboardCorners(gray, new Size(3, 3), corners);
 
-        // draw center
         if (found) {
+            // calculate center
             for (var corner : corners.toList()) {
                 center.x += corner.x;
                 center.y += corner.y;
@@ -25,10 +25,8 @@ public class ChessboardDetector {
 
             center.x /= corners.toList().size();
             center.y /= corners.toList().size();
-
-            return true;
-        } else {
-            return false;
         }
+
+        return found;
     }
 }

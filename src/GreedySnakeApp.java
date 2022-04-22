@@ -6,19 +6,15 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 public class GreedySnakeApp {
-    private static Snake snake;
     private static VideoCapture cap;
     private static HttpStreamServer http_ss;
     private static ChessboardDetector detector;
+    private static Snake snake;
+    private static Food food;
     private static boolean initailized = false;
 
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        final var RADIUS = 10;
-
-        // init snake
-        snake = new Snake(RADIUS);
 
         // opencv open camera
         cap = new VideoCapture(0);
@@ -30,6 +26,13 @@ public class GreedySnakeApp {
 
         // init detector
         detector = new ChessboardDetector();
+
+        // init snake
+        final var RADIUS = 10;
+        snake = new Snake(RADIUS);
+
+        // init food
+        food = new Food();
 
         // show camera frame
         while (cap.read(frame)) {
@@ -46,6 +49,7 @@ public class GreedySnakeApp {
                     // third point
                     chessboardCenter.x -= RADIUS;
                     snake.points.addFirst(chessboardCenter);
+
                     initailized = true;
                     continue;
                 }
@@ -53,12 +57,21 @@ public class GreedySnakeApp {
                 if (snake.canMoveTo(chessboardCenter)) {
                     snake.moveTo(chessboardCenter);
                 }
+
             }
 
             // Draw snake
             for (var point : snake.points) {
                 Imgproc.circle(frame, point, RADIUS, new Scalar(0, 255, 0), -1);
             }
+
+            // Draw food
+            Imgproc.circle(frame, food.position, RADIUS, new Scalar(0, 0, 255), -1);
+
+            // flip image
+            Core.flip(frame, frame, 1);
+
+            // send frame to http server
             http_ss.imag = frame.clone();
         }
     }
