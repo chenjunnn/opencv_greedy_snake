@@ -18,7 +18,7 @@ public class Snake {
 
     public boolean canEat(Point point) {
         var diff = calDist2Head(point);
-        return diff >= RADIUS;
+        return diff <= RADIUS;
     }
 
     public void moveTo(Point point) {

@@ -58,6 +58,11 @@ public class GreedySnakeApp {
                     snake.moveTo(chessboardCenter);
                 }
 
+                if (snake.canEat(food.position)) {
+                    snake.eat(food.position);
+                    // generate new food
+                    food = new Food();
+                }
             }
 
             // Draw snake
