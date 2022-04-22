@@ -18,7 +18,7 @@ public class Snake {
 
     public boolean canEat(Point point) {
         var diff = calDist2Head(point);
-        return diff <= RADIUS;
+        return diff <= 2 * RADIUS;
     }
 
     public void moveTo(Point point) {
@@ -27,21 +27,25 @@ public class Snake {
     }
 
     public void eat(Point point) {
-        points.addFirst(point.clone());
+        points.addLast(points.getLast().clone());
     }
 
-    public boolean eatSelf() {
-        for (var point : points) {
-            if (point == points.getFirst()) {
-                continue;
-            }
-
-            if (calDist2Head(point) < RADIUS) {
-                return true;
+    public void eatSelf() {
+        boolean eaten = false;
+        var iter = points.iterator();
+        // skip head
+        iter.next();
+        while (iter.hasNext()) {
+            var point = iter.next();
+            if (!eaten) {
+                if (calDist2Head(point) < RADIUS / 2) {
+                    eaten = true;
+                    iter.remove();
+                }
+            } else {
+                iter.remove();
             }
         }
-
-        return false;
     }
 
     private double calDist2Head(Point point) {

@@ -9,8 +9,10 @@ public class GreedySnakeApp {
     private static VideoCapture cap;
     private static HttpStreamServer http_ss;
     private static ChessboardDetector detector;
+
     private static Snake snake;
     private static Food food;
+
     private static boolean initailized = false;
 
     public static void main(String[] args) throws Exception {
@@ -28,7 +30,7 @@ public class GreedySnakeApp {
         detector = new ChessboardDetector();
 
         // init snake
-        final var RADIUS = 10;
+        final var RADIUS = 20;
         snake = new Snake(RADIUS);
 
         // init food
@@ -46,9 +48,6 @@ public class GreedySnakeApp {
                     // second point
                     chessboardCenter.x -= RADIUS;
                     snake.points.addFirst(chessboardCenter);
-                    // third point
-                    chessboardCenter.x -= RADIUS;
-                    snake.points.addFirst(chessboardCenter);
 
                     initailized = true;
                     continue;
@@ -57,6 +56,8 @@ public class GreedySnakeApp {
                 if (snake.canMoveTo(chessboardCenter)) {
                     snake.moveTo(chessboardCenter);
                 }
+
+                snake.eatSelf();
 
                 if (snake.canEat(food.position)) {
                     snake.eat(food.position);
@@ -67,7 +68,14 @@ public class GreedySnakeApp {
 
             // Draw snake
             for (var point : snake.points) {
-                Imgproc.circle(frame, point, RADIUS, new Scalar(0, 255, 0), -1);
+                Scalar color;
+                // B G R
+                if (snake.points.getFirst().equals(point)) {
+                    color = new Scalar(0, 255, 0);
+                } else {
+                    color = new Scalar(255, 0, 0);
+                }
+                Imgproc.circle(frame, point, RADIUS, color, -1);
             }
 
             // Draw food
@@ -75,6 +83,9 @@ public class GreedySnakeApp {
 
             // flip image
             Core.flip(frame, frame, 1);
+
+            // Draw snake length
+            Imgproc.putText(frame, "Length: " + snake.points.size(), new Point(10, 30), 0, 1, new Scalar(0, 255, 0), 2);
 
             // send frame to http server
             http_ss.imag = frame.clone();

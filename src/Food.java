@@ -6,10 +6,10 @@ public class Food {
     private static final int IMG_WIDTH = 640;
     private static final int IMG_HEIGHT = 480;
 
-    private static final int LEFT_BOUND = 50;
-    private static final int RIGHT_BOUND = IMG_WIDTH - 50;
-    private static final int TOP_BOUND = 50;
-    private static final int BOTTOM_BOUND = IMG_HEIGHT - 50;
+    private static final int LEFT_BOUND = 150;
+    private static final int RIGHT_BOUND = IMG_WIDTH - 150;
+    private static final int TOP_BOUND = 150;
+    private static final int BOTTOM_BOUND = IMG_HEIGHT - 150;
 
     public Food() {
         position = new Point(
